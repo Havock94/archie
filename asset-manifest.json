@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/archie/static/css/main.28bcc0ae.css",
-    "main.js": "/archie/static/js/main.29c2c391.js",
+    "main.js": "/archie/static/js/main.41dc8256.js",
     "index.html": "/archie/index.html",
     "main.28bcc0ae.css.map": "/archie/static/css/main.28bcc0ae.css.map",
-    "main.29c2c391.js.map": "/archie/static/js/main.29c2c391.js.map"
+    "main.41dc8256.js.map": "/archie/static/js/main.41dc8256.js.map"
   },
   "entrypoints": [
     "static/css/main.28bcc0ae.css",
-    "static/js/main.29c2c391.js"
+    "static/js/main.41dc8256.js"
   ]
 }
