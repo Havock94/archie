@@ -46,7 +46,7 @@ const router = createBrowserRouter([
 		element: <Root leftComponent={LayoutLeft} rightComponent={LayoutRight} toolbar={LayoutToolbar} />,
 		errorElement: <ErrorPage />,
 	},
-]);
+], { basename: '/archie'});
 
 /**
  * MUI Theme
