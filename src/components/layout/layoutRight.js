@@ -1,22 +1,25 @@
 import { Drawer, Fab, Typography } from "@mui/material";
-import { SortableTree } from "../components/layoutTree/SortableTree";
-import uuid from "react-uuid";
+import { SortableTree } from "./layoutTree/SortableTree";
 import { useEffect, useState } from "react";
 import { AddRounded } from "@mui/icons-material";
 import classNames from "classnames";
-import LayoutEditor from "../components/layoutEditor/layoutEditor";
+import LayoutEditor from "./layoutEditor/layoutEditor";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	LAYOUT_DEFAULT_CLASSES,
 	selectLayoutItems,
 	setLayoutItemData,
 	setLayoutItems,
-} from "../reducers/layout";
-import { findItemDeep } from "../components/layoutTree/utilities";
+	setLayoutItemsData,
+} from "../../reducers/layout";
+import { findItemDeep } from "./layoutTree/utilities";
+import LZString from "lz-string";
 
-const LayoutRight = ({ sharedContext, setSharedContext }) => {
+const LayoutRight = ({ urlParams, sharedContext, setSharedContext }) => {
 	const dispatch = useDispatch();
-	const layoutItems = useSelector(selectLayoutItems);
+	const _layoutItems = useSelector(selectLayoutItems);
+	//If there's the restoreLayout parameter I still initialize it as an empty array, the parameter will be decoded in an effect below
+	const [layoutItems, _setLayoutItems] = useState(urlParams.restoreLayout ? [] : _layoutItems);
+	const [newItems, setNewItems] = useState(null);
 	const [componentLabelFunction, setComponentLabelFunction] = useState(
 		() => {}
 	);
@@ -26,7 +29,6 @@ const LayoutRight = ({ sharedContext, setSharedContext }) => {
 	const [drawerData, setDrawerData] = useState(null);
 
 	const addItem = () => {
-		//TODO L'ID SALVATO NELLA MAPPA NON VA BENE
 		addItemsFunction({
 			label: "New element",
 			children: [],
@@ -62,6 +64,7 @@ const LayoutRight = ({ sharedContext, setSharedContext }) => {
 		}
 	}, [sharedContext]);
 
+	//Remove the selectedId when the drawer closes
 	useEffect(() => {
 		if(drawerOpen === false){
 			setSharedContext((prev) => ({ ...prev, selectedItemId: null }));
@@ -76,6 +79,21 @@ const LayoutRight = ({ sharedContext, setSharedContext }) => {
 			);
 		}
 	}, [editItemPropertyFunction]);
+
+	//Restore the previous layout session when navigating to /layout/previouslayouttoken
+	useEffect(() => {
+		if(urlParams.restoreLayout){
+			try{
+				const restoreLayout = JSON.parse(LZString.decompressFromEncodedURIComponent(urlParams.restoreLayout));
+				setNewItems(restoreLayout.items);
+				dispatch(setLayoutItemsData(restoreLayout.data));
+			}catch(e){}
+		}
+	}, [urlParams]);
+
+	useEffect(() => {
+		_setLayoutItems(_layoutItems); //Update internal LayoutItems
+	}, [_layoutItems]);
 
 	return (
 		<>
@@ -106,11 +124,12 @@ const LayoutRight = ({ sharedContext, setSharedContext }) => {
 					)}
 				</Drawer>
 				<Typography as="h4" className="mb-6">
-					Layout builder
+					Layout tree
 				</Typography>
 				<div>
 					<SortableTree
 						defaultItems={layoutItems}
+						newItems={newItems}
 						setItemsOutput={handleOutputItems}
 						setAddItemsFunction={setAddItemsFunction}
 						setEditItemPropertyFunction={
@@ -127,6 +146,7 @@ const LayoutRight = ({ sharedContext, setSharedContext }) => {
 				</div>
 			</div>
 			<Fab
+				color="secondary"
 				className={classNames(
 					drawerOpen ? "hidden" : "block",
 					"absolute bottom-4 right-4 bg-pink-500 hover:bg-pink-400 active:bg-pink-700"

@@ -5,10 +5,10 @@ import ContainerEditor from './containerEditor';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
-import TextField from '../textfield';
+import TextField from '../../textfield';
 import SelfEditor from './selfEditor';
 import { useDispatch, useSelector } from 'react-redux';
-import { LAYOUT_DEFAULT_CLASSES, selectLayoutItems, selectLayoutItemsData, setLayoutItemData } from '../../reducers/layout';
+import { LAYOUT_DEFAULT_CLASSES, selectLayoutItems, selectLayoutItemsData, setLayoutItemData } from '../../../reducers/layout';
 import classNames from 'classnames';
 import { findItemDeep } from '../layoutTree/utilities';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
@@ -72,12 +72,15 @@ const LayoutEditor = ({ drawerData, setComponentLabel, setDrawerOpen, ...props }
 			setLayoutData(_data[drawerData.selectedItemId]);
 			setOriginalItemLabel(getLayoutItem().label);
 			_setComponentLabel(getLayoutItem().label);
-			triggerRipple();
 		}else{
 			dispatch(setLayoutItemData({ id: drawerData.selectedItemId, data: LAYOUT_DEFAULT_CLASSES}));
 		}
 	}
 
+	useEffect(() => {
+		triggerRipple();
+	}, [componentLabel]);
+	
 	//On selectedItem change
 	useEffect(() => {
 		if (drawerData.selectedItemId) {
@@ -93,14 +96,18 @@ const LayoutEditor = ({ drawerData, setComponentLabel, setDrawerOpen, ...props }
 	return (
 		<>
 			{/* Node name */}
-			<div className={classNames('relative flex flex-row items-start gap-6', { 'mt-4': isEditingName })} ref={containerRef}>
+			<div className={classNames('relative flex flex-row items-start gap-6 p-4 rounded-md w-fit', { 'mt-4': isEditingName })} ref={containerRef}>
 				<IconButton
 					onClick={() => {
 						setDrawerOpen(false);
 					}}>
 					<CloseRoundedIcon />
 				</IconButton>
-				<TouchRipple ref={rippleRef} center />
+				<TouchRipple
+					classes={{ child: '!bg-blue-500' }}
+					ref={rippleRef}
+					center
+				/>
 				<div className="flex flex-row items-start">
 					{!isEditingName && (
 						<Typography variant="h6" className="mr-2 py-1" onClick={() => setIsEditingName(true)}>
@@ -150,7 +157,7 @@ const LayoutEditor = ({ drawerData, setComponentLabel, setDrawerOpen, ...props }
 			</div>
 			{sections.map((section, i) => (
 				<Accordion
-					className="shadow-none unstyled"
+					className="shadow-none mt-0 unstyled"
 					key={i}
 					expanded={expandedPanel === i}
 					onChange={() => setExpandedPanel(expandedPanel === i ? null : i)}>

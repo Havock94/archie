@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { motion, LayoutGroup } from "framer-motion";
 import { useSelector } from "react-redux";
-import { selectLayoutItems, selectLayoutItemsData } from "../reducers/layout";
+import { selectLayoutItems, selectLayoutItemsData } from "../../reducers/layout";
 import classNames from "classnames";
 import { Typography } from "@mui/material";
+import LZString from "lz-string";
 
-export default function LayoutLeft({ sharedContext, setSharedContext, ...props }) {
+export default function LayoutLeft({ urlParams, sharedContext, setSharedContext }) {
+	window.LZString = LZString;
 	const layoutItems = useSelector(selectLayoutItems);
 	const layoutItemsData = useSelector(selectLayoutItemsData);
 	const [hoveredElement, setHoveredElement] = useState(null);
@@ -14,6 +16,9 @@ export default function LayoutLeft({ sharedContext, setSharedContext, ...props }
 	const getItemData = (item) => (layoutItemsData[item.id] || {});
 
 	const getDisplayElement = (item) => {
+		//When restoring a layout there's a delay from the loading and the moment where the redux variable is available.
+		//If an empty item arrives here, just ignore it, it will be re-rendered when the redux variable will be set
+		if(!item) return <></>;
 		const itemData = getItemData(item);
 		return (
 			<motion.div
@@ -21,6 +26,7 @@ export default function LayoutLeft({ sharedContext, setSharedContext, ...props }
 				key={item.id}
 				id={item.id}
 				className={classNames(
+					{ '!overflow-auto': item.id === 'root' },
 					`preview-${item.id}`,
 					'flex flex-col border-4 border-transparent transition-colors bg-blue-400/20 m-4 p-4 rounded-md shadow-md',
 					{"border-blue-400 cursor-pointer": hoveredElement ? hoveredElement === item.id : sharedContext.selectedItemId === item.id},

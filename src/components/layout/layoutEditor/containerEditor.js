@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLayoutItemsData, setLayoutItemData } from '../../reducers/layout';
+import { selectLayoutItemsData, setLayoutItemData } from '../../../reducers/layout';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 
 export const FLEX_DIRECTIONS = {

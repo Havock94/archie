@@ -67,6 +67,7 @@ export const sortableTreeKeyboardCoordinates =
 							};
 						}
 						break;
+					default: break;
 				}
 
 				return undefined;

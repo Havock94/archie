@@ -18,7 +18,7 @@ const Button = ({ variant = 'contained', icon, iconLeft, iconRight, disabled, on
 	}
 
 	return (
-		<ButtonComponent { ...buttonProperties } {...props}
+		<ButtonComponent { ...buttonProperties } {...props} color="secondary"
 			className={classNames(className, buttonVariantClasses, "rounded-full px-4 py-2 font-semibold") }
 		>
 			{ icon || children }

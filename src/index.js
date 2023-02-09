@@ -1,47 +1,49 @@
-import React, { forwardRef } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
-import * as serviceWorker from "./serviceWorker";
+import React, { forwardRef } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import * as serviceWorker from './serviceWorker';
 
-import { Provider as ReduxProvider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import layoutReducer from "./reducers/layout";
-import {
-	Link as RouterLink,
-	createBrowserRouter,
-	RouterProvider,
-} from "react-router-dom";
-import Root from "./routes/root";
-import ErrorPage from "./routes/errorPage";
-import Home from "./routes/home";
-import {
-	createTheme,
-	StyledEngineProvider,
-	ThemeProvider,
-} from "@mui/material";
-import LayoutLeft from "./routes/layoutLeft";
-import LayoutRight from "./routes/layoutRight";
-
+import { Provider as ReduxProvider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import layoutReducer from './reducers/layout';
+import { Link as RouterLink, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Root from './routes/root';
+import ErrorPage from './routes/errorPage';
+import Home from './routes/home';
+import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material';
+import LayoutLeft from './components/layout/layoutLeft';
+import LayoutRight from './components/layout/layoutRight';
+import LayoutToolbar from './components/layout/layoutToolbar/layoutToolbar';
+import { Toaster } from 'react-hot-toast';
+import Scrollbars from 'react-custom-scrollbars';
 /**
  * React Router
  */
+//Forwars URL params to Root element
+const loader = ({ params }) => params;
 const router = createBrowserRouter([
 	{
-		path: "/",
+		path: '/',
+		loader,
 		element: <Root />,
 		errorElement: <ErrorPage />,
 		children: [
 			{
-				path: "",
+				path: '',
 				element: <Home />,
 			},
 		],
 	},
 	{
-		path: "layout",
-		element: (
-			<Root leftComponent={LayoutLeft} rightComponent={LayoutRight} />
-		),
+		path: 'layout',
+		loader,
+		element: <Root leftComponent={LayoutLeft} rightComponent={LayoutRight} toolbar={LayoutToolbar} />,
+		errorElement: <ErrorPage />,
+	},
+	{
+		path: 'layout/:restoreLayout',
+		loader,
+		element: <Root leftComponent={LayoutLeft} rightComponent={LayoutRight} toolbar={LayoutToolbar} />,
 		errorElement: <ErrorPage />,
 	},
 ]);
@@ -55,6 +57,18 @@ const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
 });
 
 const theme = createTheme({
+	palette: {
+		mode: 'light',
+		primary: {
+			main: '#3b82f6',
+		},
+		secondary: {
+			main: '#ec4899',
+		},
+		background: {
+			default: '#f4f4f5',
+		},
+	},
 	components: {
 		MuiLink: {
 			defaultProps: {
@@ -75,13 +89,16 @@ const reduxStore = configureStore({
 	},
 });
 
-const container = document.getElementById("root");
+const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
 	<ReduxProvider store={reduxStore}>
 		<StyledEngineProvider injectFirst>
 			<ThemeProvider theme={theme}>
-				<RouterProvider router={router} />
+				<Toaster position='bottom-center'/>
+				<Scrollbars className='!w-screen !h-screen' autoHide>
+					<RouterProvider router={router} />
+				</Scrollbars>
 			</ThemeProvider>
 		</StyledEngineProvider>
 	</ReduxProvider>

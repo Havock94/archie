@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ALIGN_ITEMS, FLEX_DIRECTIONS, FLEX_WRAP, JUSTIFY_CONTENT } from "../components/layoutEditor/containerEditor";
-import { FLEX_BASIS, FLEX_GROW } from "../components/layoutEditor/selfEditor";
+import { ALIGN_ITEMS, FLEX_DIRECTIONS, FLEX_WRAP, JUSTIFY_CONTENT } from "../components/layout/layoutEditor/containerEditor.js";
+import { FLEX_BASIS, FLEX_GROW } from "../components/layout/layoutEditor/selfEditor";
+
 function flat(array) {
 	var result = [];
 	array.map((a) => {
@@ -8,6 +9,7 @@ function flat(array) {
 		if (Array.isArray(a.children)) {
 			result = result.concat(flat(a.children));
 		}
+		return;
 	});
 	return result;
 }
@@ -128,6 +130,9 @@ const layoutSlice = createSlice({
 				layoutItems: layoutItems,
 			};
 		},
+		setLayoutItemsData: (state = null, { payload }) => {
+			state.itemsData = payload || {};
+		},
 		setLayoutItemData: (state = null, { payload }) => {
 			if(payload.data == null){
 				state.itemsData = {
@@ -152,6 +157,6 @@ export const selectLayoutItem = (state, id) =>
 	state.layout.layoutItems.filter((i) => i.id === id)[0];
 export const selectLayoutItemsData = (state) => state.layout.itemsData;
 
-export const { setLayoutItems, setLayoutItem, setLayoutItemData } =
+export const { setLayoutItems, setLayoutItem, setLayoutItemData, setLayoutItemsData } =
 	layoutSlice.actions;
 export default layoutSlice.reducer;

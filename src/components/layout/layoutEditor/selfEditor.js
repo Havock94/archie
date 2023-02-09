@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 
 import { useDispatch, } from 'react-redux';
-import {  setLayoutItemData } from '../../reducers/layout';
+import {  setLayoutItemData } from '../../../reducers/layout';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 
 export const FLEX_GROW = {

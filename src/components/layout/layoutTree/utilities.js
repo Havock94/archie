@@ -166,9 +166,7 @@ function setPropertyDeep(items, property, setter, insertIfMissing){
 	})
 }
 export function addItem(items, { parentId, ..._newItem }){
-	console.log("newItem", {..._newItem});
-	let newItem = setPropertyDeep([{ ..._newItem }], "id", () => uuid())[0];
-	console.log("newItem (new ids)", newItem);
+	let newItem = setPropertyDeep([{ ..._newItem }], "id", () => uuid(), true)[0];
 	
 	if(parentId){
 		return addItemToParent(items, parentId, newItem);

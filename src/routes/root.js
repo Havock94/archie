@@ -1,26 +1,21 @@
-import { React, useEffect, useState } from "react";
+import { Fragment, React, useEffect, useState } from "react";
 import classNames from "classnames";
 import Logo from "../components/logo";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom";
 import { IconButton, Slide, Typography } from "@mui/material";
 import FullscreenRoundedIcon from "@mui/icons-material/FullscreenRounded";
 import FullscreenExitRoundedIcon from "@mui/icons-material/FullscreenExitRounded";
 
-const routes = {
-	"/layout": {
-		title: "Layout",
-		description:
-			"This first section will help you build the layout and insert contents in your app",
-	},
-};
-export default function Root({ leftComponent, rightComponent }) {
-	const location = useLocation();
+export default function Root({ leftComponent, rightComponent, toolbar = Fragment }) {
+	const urlParams = useLoaderData();	//Get URL Params from the loader function
+	const location = useLocation();	//Location object to detect "/" path
 	const LeftComponent = leftComponent;
 	const RightComponent = rightComponent;
+	const ToolbarComponent = toolbar;
 	const [maximizeLeft, setMaximizeLeft] = useState(false);
 	const [maximizeRight, setMaximizeRight] = useState(false);
 	const [sharedContext, setSharedContext] = useState({});
-
+	
 	useEffect(() => {
 		document.documentElement.classList.add("h-screen");
 		document.body.classList.add("h-screen", "bg-zinc-100");
@@ -57,21 +52,8 @@ export default function Root({ leftComponent, rightComponent }) {
 							</nav>*/}
 					</div>
 				</div>
-				<header>
-					<div className="mx-auto px-16 text-center sm:text-left">
-						<Typography
-							variant="h5"
-							className="leading-tight tracking-tight text-white"
-						>
-							{routes[location.pathname]?.title}
-						</Typography>
-						<Typography
-							variant="subtitle2"
-							className="leading-tight tracking-tight text-white py-4"
-						>
-							{routes[location.pathname]?.description}
-						</Typography>
-					</div>
+				<header className="flex flex-row items-center justify-between px-6 lg:px-16">
+					<ToolbarComponent />
 				</header>
 			</nav>
 			<main className="flex flex-row items-start justify-around -mt-24 pb-8">
@@ -110,7 +92,7 @@ export default function Root({ leftComponent, rightComponent }) {
 										</IconButton>
 										<div className="relative flex items-stretch p-6 min-h-[75vh]">
 											{!LeftComponent && <Outlet />}
-											{LeftComponent && <LeftComponent sharedContext={sharedContext} setSharedContext={setSharedContext} />}
+											{LeftComponent && <LeftComponent urlParams={ urlParams } sharedContext={sharedContext} setSharedContext={setSharedContext} />}
 										</div>
 									</div>
 								</section>
@@ -149,7 +131,7 @@ export default function Root({ leftComponent, rightComponent }) {
 										</IconButton>
 										<div className="relative flex items-stretch p-6 min-h-[75vh]">
 											{RightComponent && (
-												<RightComponent sharedContext={sharedContext} setSharedContext={setSharedContext} />
+												<RightComponent urlParams={ urlParams } sharedContext={sharedContext} setSharedContext={setSharedContext} />
 											)}
 										</div>
 									</div>

@@ -27,31 +27,25 @@ const Logo = ({
 	useEffect(() => {
 		switch (size) {
 			case "small":
-				{
 					if (variant === "initial") {
 						setSize({ width: "w-6", height: "h-6" });
 					} else {
 						setSize({ width: "w-26", height: "h-6" });
 					}
-				}
 				break;
 			case "medium":
-				{
 					if (variant === "initial") {
 						setSize({ width: "w-12", height: "h-12" });
 					} else {
 						setSize({ width: "w-56", height: "h-12" });
 					}
-				}
 				break;
 			case "large":
-				{
 					if (variant === "initial") {
 						setSize({ width: "w-24", height: "h-24" });
 					} else {
 						setSize({ width: "w-96", height: "h-24" });
 					}
-				}
 				break;
 		}
 	}, [variant, size]);
@@ -63,7 +57,7 @@ const Logo = ({
 				className={classNames(
 					_size.width,
 					_size.height,
-					"pointer-events-none"
+					"max-w-full pointer-events-none"
 				)}
 				style={{ maxHeight: '6rem' }}
 			>

@@ -4,7 +4,7 @@ import ExpandMoreRounded from '@mui/icons-material/ExpandMoreRounded';
 import { Action, Handle, Remove } from './components';
 import styles from './TreeItem.module.css';
 import { IconButton, Typography } from '@mui/material';
-import Button from '../../../button';
+import Button from '../../../../button';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 
 export const TreeItem = forwardRef(

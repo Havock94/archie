@@ -17,6 +17,3 @@ code {
 }
 
 .MuiPaper-root.unstyled::before{ display: none }
-.MuiTouchRipple-child{
-	background: #3b82f6 !important;
-}

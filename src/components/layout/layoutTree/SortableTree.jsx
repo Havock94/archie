@@ -66,6 +66,7 @@ const dropAnimationConfig = {
 export function SortableTree({
 	collapsible,
 	defaultItems = [],
+	newItems,	//Used to force a reload of the tree items
 	indicator = false,
 	indentationWidth = 50,
 	removable,
@@ -82,7 +83,6 @@ export function SortableTree({
 	const [currentPosition, setCurrentPosition] = useState(null);
 
 	const flattenedItems = useMemo(() => {
-		console.log("Items or activeId changed", activeId, items);
 		const flattenedTree = flattenTree(items);
 		const collapsedItems = flattenedTree.reduce(
 			(acc, { children, collapsed, id }) =>
@@ -99,12 +99,16 @@ export function SortableTree({
 	const insertItem = (newItem) => {
 		setItems((items) => {
 			const newItems = addItem(items, newItem);
-			console.log("InsertItem pre", items);
-			console.log("InsertItem post", newItems);
 			return newItems;
 		});
 	};
 
+	useEffect(() => {
+		if(newItems != null){
+			setItems(newItems);
+		}
+	}, [newItems]);
+	
 	useEffect(() => {
 		setAddItemsFunction(() => insertItem);
 		setEditItemPropertyFunction(
