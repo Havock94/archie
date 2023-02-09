@@ -204,9 +204,8 @@ const ContainerEditor = ({ itemId, layoutData }) => {
 						</AccordionSummary>
 						<AccordionDetails>
 							<Typography variant="caption">
-								Align items define the default behavior for how flex items are laid out along the cross
-								axis on the current line. Think of it as the justify-content perpendicular to the
-								main-axis.
+								By default, flex items will all try to fit onto one line.
+								You can change this behaviour and allow the items to wrap as needed with this property.
 							</Typography>
 						</AccordionDetails>
 					</Accordion>

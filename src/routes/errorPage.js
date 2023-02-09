@@ -53,7 +53,7 @@ export default function ErrorPage() {
 					</div>
 				</main>
 				<footer className="mb-12">
-					<Accordion className="bg-blue-500 bg-opacity-75 text-zinc-300">
+					<Accordion className="bg-blue-500 bg-opacity-75 text-zinc-300 max-w-[50vw]">
 						<AccordionSummary
 							expandIcon={<ExpandMoreRounded className="text-zinc-300" />}
 							aria-controls="panel1a-content"
@@ -64,8 +64,8 @@ export default function ErrorPage() {
 							</Typography>
 						</AccordionSummary>
 						<AccordionDetails>
-							<Typography>
-								<pre>{error.error?.stack || error.stack || error}</pre>
+							<Typography className="max-h-[250px] overflow-auto">
+								<pre className="overflow-auto break-all whitespace-normal font-mono">{error.error?.stack || error.stack || error}</pre>
 							</Typography>
 						</AccordionDetails>
 					</Accordion>

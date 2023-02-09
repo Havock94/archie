@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import { Provider as ReduxProvider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import layoutReducer from './reducers/layout';
-import { Link as RouterLink, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Link as RouterLink, createBrowserRouter, RouterProvider, createHashRouter, Navigate } from 'react-router-dom';
 import Root from './routes/root';
 import ErrorPage from './routes/errorPage';
 import Home from './routes/home';
@@ -21,7 +21,7 @@ import Scrollbars from 'react-custom-scrollbars';
  */
 //Forwars URL params to Root element
 const loader = ({ params }) => params;
-const router = createBrowserRouter([
+const router = createHashRouter([
 	{
 		path: '/',
 		loader,
@@ -39,14 +39,16 @@ const router = createBrowserRouter([
 		loader,
 		element: <Root leftComponent={LayoutLeft} rightComponent={LayoutRight} toolbar={LayoutToolbar} />,
 		errorElement: <ErrorPage />,
+		children: [
+			{
+				path: ':restoreLayout',
+				loader,
+				element: <Root leftComponent={LayoutLeft} rightComponent={LayoutRight} toolbar={LayoutToolbar} />,
+				errorElement: <ErrorPage />,
+			}
+		]
 	},
-	{
-		path: 'layout/:restoreLayout',
-		loader,
-		element: <Root leftComponent={LayoutLeft} rightComponent={LayoutRight} toolbar={LayoutToolbar} />,
-		errorElement: <ErrorPage />,
-	},
-], { basename: '/archie'});
+]);
 
 /**
  * MUI Theme

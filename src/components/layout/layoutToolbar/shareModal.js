@@ -36,7 +36,7 @@ const ShareModal = ({ open, close }) => {
 
 	useEffect(() => {
 		setShareLink(
-			`${location.protocol}//${location.host}/archie/layout/${LZString.compressToEncodedURIComponent(
+			`${location.protocol}//${location.host}/archie/#/layout/${LZString.compressToEncodedURIComponent(
 				JSON.stringify({ items: layoutItems, data: layoutItemsData })
 			)}`
 		);

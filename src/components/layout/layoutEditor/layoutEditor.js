@@ -78,7 +78,7 @@ const LayoutEditor = ({ drawerData, setComponentLabel, setDrawerOpen, ...props }
 	}
 
 	useEffect(() => {
-		triggerRipple();
+		if(!isEditingName) triggerRipple();
 	}, [componentLabel]);
 	
 	//On selectedItem change
