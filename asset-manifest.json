@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/archie/static/css/main.28bcc0ae.css",
+    "main.js": "/archie/static/js/main.ce32a4ad.js",
+    "index.html": "/archie/index.html",
+    "main.28bcc0ae.css.map": "/archie/static/css/main.28bcc0ae.css.map",
+    "main.ce32a4ad.js.map": "/archie/static/js/main.ce32a4ad.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.28bcc0ae.css",
+    "static/js/main.ce32a4ad.js"
+  ]
+}
