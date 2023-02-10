@@ -124,6 +124,7 @@ const LayoutEditor = ({ drawerData, setComponentLabel, setDrawerOpen, ...props }
 							helperText={componentLabel.length === 0 ? 'Name mandatory' : ''}
 							onChange={handleComponentNameChange}
 							inputRef={(input) => input && input.focus()}
+							onKeyDown={e => e.keyCode === 13 ? (saveComponentName() || setIsEditingName(false)) : ''}
 						/>
 					)}
 					{!isEditingName && (

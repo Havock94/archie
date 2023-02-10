@@ -6,16 +6,17 @@ import * as serviceWorker from './serviceWorker';
 import { Provider as ReduxProvider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import layoutReducer from './reducers/layout';
-import { Link as RouterLink, createBrowserRouter, RouterProvider, createHashRouter, Navigate } from 'react-router-dom';
+import { Link as RouterLink, RouterProvider, createHashRouter, Navigate } from 'react-router-dom';
 import Root from './routes/root';
 import ErrorPage from './routes/errorPage';
 import Home from './routes/home';
-import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material';
-import LayoutLeft from './components/layout/layoutLeft';
-import LayoutRight from './components/layout/layoutRight';
+import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material'
 import LayoutToolbar from './components/layout/layoutToolbar/layoutToolbar';
 import { Toaster } from 'react-hot-toast';
 import Scrollbars from 'react-custom-scrollbars';
+import { LayoutLeft, LayoutRight } from './components/layout/layout';
+import Export from './components/export/export';
+import ExportToolbar from './components/export/exportToolbar/exportToolbar';
 /**
  * React Router
  */
@@ -25,14 +26,8 @@ const router = createHashRouter([
 	{
 		path: '/',
 		loader,
-		element: <Root />,
-		errorElement: <ErrorPage />,
-		children: [
-			{
-				path: '',
-				element: <Home />,
-			},
-		],
+		element: <Root component={Home} />,
+		errorElement: <ErrorPage />
 	},
 	{
 		path: 'layout',
@@ -44,6 +39,20 @@ const router = createHashRouter([
 				path: ':restoreLayout',
 				loader,
 				element: <Root leftComponent={LayoutLeft} rightComponent={LayoutRight} toolbar={LayoutToolbar} />,
+				errorElement: <ErrorPage />,
+			}
+		]
+	},
+	{
+		path: 'export',
+		loader,
+		element: <Root toolbar={ExportToolbar} component={Export} />,
+		errorElement: <ErrorPage />,
+		children: [
+			{
+				path: ':exportData',
+				loader,
+				element: <Root toolbar={ExportToolbar} component={Export} />,
 				errorElement: <ErrorPage />,
 			}
 		]

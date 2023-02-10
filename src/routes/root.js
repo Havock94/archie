@@ -1,14 +1,14 @@
 import { Fragment, React, useEffect, useState } from "react";
 import classNames from "classnames";
 import Logo from "../components/logo";
-import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom";
-import { IconButton, Slide, Typography } from "@mui/material";
+import { Link, useLoaderData } from "react-router-dom";
+import { IconButton, Slide } from "@mui/material";
 import FullscreenRoundedIcon from "@mui/icons-material/FullscreenRounded";
 import FullscreenExitRoundedIcon from "@mui/icons-material/FullscreenExitRounded";
 
-export default function Root({ leftComponent, rightComponent, toolbar = Fragment }) {
+export default function Root({ component, leftComponent, rightComponent, toolbar = Fragment }) {
 	const urlParams = useLoaderData();	//Get URL Params from the loader function
-	const location = useLocation();	//Location object to detect "/" path
+	const OutletComponent = component;
 	const LeftComponent = leftComponent;
 	const RightComponent = rightComponent;
 	const ToolbarComponent = toolbar;
@@ -31,25 +31,6 @@ export default function Root({ leftComponent, rightComponent, toolbar = Fragment
 								<Logo variant="initial" theme="light" />
 							</Link>
 						</div>
-						{/*<nav className="flex space-x-4">
-								{navigation.map((item) => (
-									<Link
-										key={item.name}
-										to={item.href}
-										className={classNames(
-											item.current
-												? "text-white"
-												: "text-blue-100",
-											"text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10"
-										)}
-										aria-current={
-											item.current ? "page" : undefined
-										}
-									>
-										{item.name}
-									</Link>
-								))}
-							</nav>*/}
 					</div>
 				</div>
 				<header className="flex flex-row items-center justify-between px-6 lg:px-16">
@@ -68,9 +49,7 @@ export default function Root({ leftComponent, rightComponent, toolbar = Fragment
 							<div
 								className={classNames(
 									{
-										"!col-span-4":
-											maximizeLeft ||
-											location.pathname === "/",
+										"!col-span-4": maximizeLeft || OutletComponent,
 									},
 									"grid col-span-2 grid-cols-1 gap-4"
 								)}
@@ -78,7 +57,7 @@ export default function Root({ leftComponent, rightComponent, toolbar = Fragment
 								<section aria-labelledby="section-1-title">
 									<div className="relative overflow-hidden rounded-lg bg-white shadow">
 										<IconButton
-											className={classNames({ hidden: location.pathname === "/" }, "absolute top-3 right-3 z-10")}
+											className={classNames({ hidden: OutletComponent }, "absolute top-3 right-3 z-10")}
 											onClick={() =>
 												setMaximizeLeft((prev) => !prev)
 											}
@@ -91,8 +70,8 @@ export default function Root({ leftComponent, rightComponent, toolbar = Fragment
 											)}
 										</IconButton>
 										<div className="relative flex items-stretch p-6 min-h-[75vh]">
-											{!LeftComponent && <Outlet />}
-											{LeftComponent && <LeftComponent urlParams={ urlParams } sharedContext={sharedContext} setSharedContext={setSharedContext} />}
+											{ OutletComponent && <OutletComponent urlParams={ urlParams } /> }
+											{ !OutletComponent && LeftComponent && <LeftComponent urlParams={ urlParams } sharedContext={sharedContext} setSharedContext={setSharedContext} /> }
 										</div>
 									</div>
 								</section>
@@ -106,9 +85,7 @@ export default function Root({ leftComponent, rightComponent, toolbar = Fragment
 						>
 							<div
 								className={classNames(
-									location.pathname === "/"
-										? "hidden"
-										: "grid col-span-2 grid-cols-1 gap-4",
+									OutletComponent ? "hidden" : "grid col-span-2 grid-cols-1 gap-4",
 									{ "!col-span-4": maximizeRight }
 								)}
 							>

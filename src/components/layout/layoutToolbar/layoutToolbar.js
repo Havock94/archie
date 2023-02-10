@@ -1,11 +1,24 @@
-import { AddCircleRounded, InfoRounded, ShareRounded } from '@mui/icons-material';
+import React, { useEffect, useState } from 'react';
+import { AddCircleRounded, ChevronRightRounded, InfoRounded, ShareRounded } from '@mui/icons-material';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import LZString from 'lz-string';
+import { useSelector } from 'react-redux';
+import { selectLayoutItems, selectLayoutItemsData } from '../../../reducers/layout';
 import Button from '../../button';
 import ShareModal from './shareModal';
 
 const LayoutToolbar = () => {
 	const [shareDialogOpen, setShareDialogOpen] = useState(false);
+	const layoutItems = useSelector(selectLayoutItems);
+	const layoutItemsData = useSelector(selectLayoutItemsData);
+	const location = window.location;
+	const [exportLink, setExportLink] = useState('');
+
+	useEffect(() => {
+		setExportLink(
+			LZString.compressToEncodedURIComponent(JSON.stringify({ items: layoutItems, data: layoutItemsData }))
+		);
+	}, [layoutItems, layoutItemsData]);
 
 	return (
 		<>
@@ -18,7 +31,7 @@ const LayoutToolbar = () => {
 							Layout <InfoRounded className="w-4 h-4" />
 						</Typography>
 						<Typography variant="subtitle2" className="leading-tight tracking-tight text-white py-4">
-							This first section will help you build the layout and insert contents in your app
+							This section will help you build the layout and insert contents in your app
 						</Typography>
 					</div>
 				</AccordionSummary>
@@ -29,7 +42,9 @@ const LayoutToolbar = () => {
 								Add contents to your app by clicking the <AddCircleRounded /> button in the right
 								section.
 							</li>
-							<li>Reorder, duplicate or delete content using the <b>Layout Tree</b>.</li>
+							<li>
+								Reorder, duplicate or delete content using the <b>Layout Tree</b>.
+							</li>
 							<li>
 								Click on a tree node name or click an element in the <b>Preview</b> panel to edit its
 								properties.
@@ -47,13 +62,22 @@ const LayoutToolbar = () => {
 			<Button
 				variant="text"
 				className="!text-white"
-				iconRight={<ShareRounded className="text-white" />}
+				iconRight={<ShareRounded className="hidden md:block text-white" />}
 				onClick={() => {
 					setShareDialogOpen(true);
 				}}>
 				Share
 			</Button>
 			<ShareModal open={shareDialogOpen} close={() => setShareDialogOpen(false)} />
+
+			{/* Export button */}
+			<Button
+				variant="text"
+				className="!text-white"
+				iconRight={<ChevronRightRounded className="hidden md:block text-white" />}
+				href={'/export/' + exportLink}>
+				Export
+			</Button>
 		</>
 	);
 };

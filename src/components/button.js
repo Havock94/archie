@@ -28,5 +28,6 @@ const Button = ({ variant = 'contained', icon, iconLeft, iconRight, disabled, on
 Button.propTypes = {
 	variant: PropTypes.oneOf(['text', 'contained', 'outline']),
 	size: PropTypes.oneOf(['small', 'medium', 'large']),
+	href: PropTypes.string,
 }
 export default Button;
